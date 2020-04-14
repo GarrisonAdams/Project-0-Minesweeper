@@ -1,1 +1,2 @@
-This is going to be Project 0
+# Minesweeper Project
+- This project will create and display a Minesweeper game in the command line
