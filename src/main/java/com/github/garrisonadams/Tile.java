@@ -1,7 +1,9 @@
+package com.github.garrisonadams;
+
 public class Tile
 {
     //To Do List:
-
+    //Access modifiers?
 
     //The location of the tile in the Minesweeper display
     int row;
@@ -28,7 +30,7 @@ public class Tile
     {
         this.row = row;
         this.column = column;
-        this.tileDisplayValue = " ";
+        this.tileDisplayValue = "0";
         this.isCovered = true;
     }
 

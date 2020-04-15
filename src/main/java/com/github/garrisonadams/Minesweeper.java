@@ -1,4 +1,6 @@
+package com.github.garrisonadams;
 import java.util.Scanner; 
+
 
 public class Minesweeper
 {

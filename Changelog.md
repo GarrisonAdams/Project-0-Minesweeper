@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.1.2
+
+### Added
+- Project has been successfully Mavenized
 
 ## Version 0.1.1
 ### Added
