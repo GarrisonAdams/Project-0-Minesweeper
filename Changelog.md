@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.1.3
+### Added
+- The user can now select any tile
+
 ## Version 0.1.2
 
 ### Added

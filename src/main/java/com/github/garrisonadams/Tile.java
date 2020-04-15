@@ -30,8 +30,9 @@ public class Tile
     {
         this.row = row;
         this.column = column;
-        this.tileDisplayValue = "0";
+        this.tileDisplayValue = " ";
         this.isCovered = true;
+        this.adjacentBombs = 1;
     }
 
     public void setTileDisplayValue(String value)
@@ -53,5 +54,33 @@ public class Tile
     {
         return String.valueOf(this.row) + " " + String.valueOf(this.column);
     }
+
+    public void uncoverTile()
+    {
+        if(isCovered)
+        {
+            this.setTileDisplayValue(String.valueOf(adjacentBombs));
+            this.toggleIsCovered();
+        }
+    }
+
+
+    public void toggleIsCovered()
+    {
+        this.isCovered = !this.isCovered;
+    }
+
+    public void setAdjacentBombs(int bombs)
+    {
+        this.adjacentBombs = bombs;
+    }
+
+
+    public int getAdjacentBombs()
+    {
+        return this.adjacentBombs;
+    }
+
+
 
 }
