@@ -23,8 +23,20 @@ public class Minesweeper
             }
         }
 
-        grid[4][4].setAdjacentBombs(0);
-           
+        grid[4][4].setAdjacentBombs(0);  
+        grid[4][5].setAdjacentBombs(0);  
+        grid[4][6].setAdjacentBombs(0);   
+        grid[3][6].setAdjacentBombs(0);     
+        grid[5][3].setAdjacentBombs(0);    
+        grid[3][5].setAdjacentBombs(0);  
+        grid[3][4].setAdjacentBombs(0);    
+        grid[6][2].setAdjacentBombs(0);          
+      
+       
+      
+        
+         
+         
     }
  
     public static void main(String[] args)
@@ -69,25 +81,45 @@ public class Minesweeper
 
     public void selectTile(int row, int column)
     {
-        grid[row][column].uncoverTile();
-        this.uncoverAdjacentTiles(row,column);
+        System.out.println("Inside selectTile");
+        System.out.println("row: " + row + " " + "column: " + column + " is covered: " + grid[row][column].getIsCovered());
+
+        if(grid[row][column].getIsCovered() == true)
+        {
+            System.out.println("Going to uncoverTile() method");
+            grid[row][column].uncoverTile();
+            if(grid[row][column].getAdjacentBombs()==0)
+            {
+                this.uncoverAdjacentTiles(row,column);
+
+            }
+        }
 
     }
 
+
     public void uncoverAdjacentTiles(int row, int column)
     {
-        if(grid[row][column].getAdjacentBombs() == 0)
+
+        System.out.println("Inside uncoverAdjacentTiles");
+        System.out.println("Input parameters: row: " + row + " " + "column: " + column);
+
+        for(int i=row-1;i<row+2;i++)
         {
-            for(int i=row-1;i<row+2;i++)
+            for(int j = column-1; j<column+2; j++)
             {
-                for(int j = column-1; j<column+2; j++)
+                System.out.println("Inside for loop: " + "row" +  i  + "column: " + j);
+                System.out.println("This Tile has " + grid[i][j].getAdjacentBombs() +" bombs");
+                if(i == row && j == column)
                 {
-                
-                    grid[i][j].uncoverTile();
-                    this.uncoverAdjacentTiles(i,j);
+                    System.out.println(" i equals row and j equals column");
+                    continue;
                 }
+                    this.selectTile(i,j);
+                
             }
         }
+        
     }
 
     //displays the Minesweeper grid on the CL

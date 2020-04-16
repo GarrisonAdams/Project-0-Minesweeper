@@ -1,8 +1,12 @@
 # Changelog
 
+## Version 0.1.4
+### Added
+- Selected tiles now propogate throughout the grid as expected, for a few test cases
+
 ## Version 0.1.3
 ### Added
-- The user can now select any tile
+- The user can now uncover any tile
 
 ## Version 0.1.2
 

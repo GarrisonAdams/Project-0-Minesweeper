@@ -49,7 +49,7 @@ public class Tile
     //Option 1: have the Minesweeper object be a parameter and execute it here
     //Option 2: have this method be executed in the Minesweeper.java class
 
-
+    @Override
     public String toString()
     {
         return String.valueOf(this.row) + " " + String.valueOf(this.column);
@@ -57,17 +57,25 @@ public class Tile
 
     public void uncoverTile()
     {
-        if(isCovered)
-        {
-            this.setTileDisplayValue(String.valueOf(adjacentBombs));
-            this.toggleIsCovered();
-        }
+        System.out.println("Inside uncoverTile() method");
+        System.out.println("Tile " + this.row + " " + this.column +" isCovered: " + this.isCovered);
+        this.setTileDisplayValue(String.valueOf(adjacentBombs));
+        this.setIsCovered(false);
+        System.out.println("Tile " + this.row + " " + this.column + " is " + this.getIsCovered() + " and has " + this.getAdjacentBombs() + " adjacent bombs");
+        System.out.println("Exiting uncoverTile() method");
+        System.out.println();
+
     }
 
 
-    public void toggleIsCovered()
+    public void setIsCovered(boolean bool)
     {
-        this.isCovered = !this.isCovered;
+        this.isCovered = bool;
+    }
+
+    public boolean getIsCovered()
+    {
+        return this.isCovered;
     }
 
     public void setAdjacentBombs(int bombs)
