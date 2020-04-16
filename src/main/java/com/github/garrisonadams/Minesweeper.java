@@ -1,16 +1,18 @@
 package com.github.garrisonadams;
-import java.util.Scanner; 
-
+import java.util.Scanner;
 
 public class Minesweeper
 {
-    static Tile[][] grid = new Tile[8][8];
+    boolean isPlaying = true;
 
+    static Tile[][] grid = new Tile[8][8];
     //Things to do
     //Set up the UI
     //Figure out how to connect to the database
     //Figure out how to calculate the number of bombs in a tile
-
+    //Include winning conditions and losing conditions
+    //Include marking tiles to indicate a bomb
+    //Include restart method
 
     public Minesweeper()
     {
@@ -30,99 +32,151 @@ public class Minesweeper
         grid[5][3].setAdjacentBombs(0);    
         grid[3][5].setAdjacentBombs(0);  
         grid[3][4].setAdjacentBombs(0);    
-        grid[6][2].setAdjacentBombs(0);          
-      
-       
-      
-        
-         
-         
+        grid[6][2].setAdjacentBombs(0); 
+
     }
- 
+
     public static void main(String[] args)
     {
-        boolean isPlaying = true; 
+        Minesweeper game = new Minesweeper();
+        game.play();
+    }
+ 
+    public void play()
+    {
+        
+
         String userInput = "";
         Scanner myScanner = new Scanner(System.in);
-        Minesweeper test = new Minesweeper();
-        int row,column;
-
+ 
         //This while loop is the UI
         while(isPlaying)
         {
-            test.display();
+            this.display();
+            System.out.println();
+            System.out.println();
 
-            System.out.println("Please enter X in order to exit the game");
-            System.out.println("Please enter select in order to select a tile");
-
+            System.out.println("Please enter exit in order to exit the game");
+            System.out.println("To select a tile: enter select [row number] [column number]");
+            System.out.println("To mark a tile: enter mark [row number] [column number]");
+            System.out.println("To unmark a tile: enter unmark [row number] [column number]");
 
             userInput = myScanner.nextLine();
+            String[] command = userInput.split(" ");
+            
+            executeCommand(command);
 
-            if(userInput.equals("X"))
-            {
-                System.out.println("Thank you for playing");
-                System.exit(0);
-            }
-            else if (userInput.equals("select"))
-            {
-                System.out.println("Please enter which row you want to select");
-                row = myScanner.nextInt();
-                System.out.println("Please enter which column you want to select");
-                column = myScanner.nextInt();
-                test.selectTile(row,column);
+        }
+        myScanner.close();
 
+    }  
 
+    public void executeCommand(String[] command)
+    {
+        String subcommand = "";
+        int row = 0;
+        int column = 0;
+
+        if(command.length == 1)
+        {
+            subcommand = command[0];
+        }
+        else if(command.length == 3)
+        {
+            subcommand = command[0];
+            try {
+                row = Integer.parseInt(command[1]);
+                column = Integer.parseInt(command[2]);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid command.  [row] and [column] values must be a number between 0 and 7");
+                return;
             }
         }
 
-           myScanner.close();
+        if( !((row >= 0 && row <= 7) && (column >= 0 && column <= 7)))
+        {
+            System.out.println("Numbers are not in the correct range. Invalid command");
+            return;
+        }
 
+        switch (subcommand) 
+        {
+            case "exit":
+                System.out.println("Thank you for playing");
+                isPlaying = false;
+                break;
+            case "select":
+                 this.selectTile(row,column);
+                break;
+            case "mark":
+                this.markTile(row,column);
+                break;
+            case "unmark":
+                this.unmarkTile(row,column);
+                break;       
+            default:
+                System.out.println("Invalid Command");
+                break;
+        }
+
+    }
+
+    public void uncoverTile(int row, int column)
+    {
+        grid[row][column].setTileDisplayValue(String.valueOf(grid[row][column].getAdjacentBombs()));
+        grid[row][column].setIsCovered(false);
     }
 
     public void selectTile(int row, int column)
     {
-        System.out.println("Inside selectTile");
-        System.out.println("row: " + row + " " + "column: " + column + " is covered: " + grid[row][column].getIsCovered());
-
-        if(grid[row][column].getIsCovered() == true)
+        if(!grid[row][column].getIsMarked())
         {
-            System.out.println("Going to uncoverTile() method");
-            grid[row][column].uncoverTile();
-            if(grid[row][column].getAdjacentBombs()==0)
+            if(grid[row][column].getIsCovered() == true)
             {
-                this.uncoverAdjacentTiles(row,column);
+                this.uncoverTile(row,column);
 
+                if(grid[row][column].getAdjacentBombs()==0)
+                {
+                    this.uncoverAdjacentTiles(row,column);
+                }
             }
         }
-
     }
-
 
     public void uncoverAdjacentTiles(int row, int column)
     {
-
-        System.out.println("Inside uncoverAdjacentTiles");
-        System.out.println("Input parameters: row: " + row + " " + "column: " + column);
-
         for(int i=row-1;i<row+2;i++)
         {
             for(int j = column-1; j<column+2; j++)
             {
-                System.out.println("Inside for loop: " + "row" +  i  + "column: " + j);
-                System.out.println("This Tile has " + grid[i][j].getAdjacentBombs() +" bombs");
                 if(i == row && j == column)
                 {
-                    System.out.println(" i equals row and j equals column");
                     continue;
                 }
                     this.selectTile(i,j);
-                
             }
         }
-        
     }
 
-    //displays the Minesweeper grid on the CL
+    public void markTile(int row, int column)
+    {
+        if(grid[row][column].getIsCovered())
+        {
+            grid[row][column].setIsMarked(true);
+            grid[row][column].setTileDisplayValue("M");
+        }
+    }
+
+    public void unmarkTile(int row, int column)
+    {
+        if(grid[row][column].getIsMarked())
+        {
+            grid[row][column].setIsMarked(false);
+            grid[row][column].setTileDisplayValue(" ");
+        }
+
+    }
+
     public void display()
     {
          //Sets up the numbers at the top of the display
@@ -136,11 +190,10 @@ public class Minesweeper
              else
              {
                  System.out.print("  " + i + " ");
-             }
-                   
+             }   
          }
  
-         
+         //Sets up the rows of the grid
          for(int i = 0; i < 8; i++)
          {
              for(int j = 0; j < 8; j++)
