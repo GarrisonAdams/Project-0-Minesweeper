@@ -18,7 +18,7 @@ public class Tile
     boolean isCovered;
 
     //Whether or not the tile has a bomb
-    boolean hasBomb;
+    boolean isBomb;
 
     //The number of bombs that are adjacent to this tile
     int adjacentBombs;
@@ -83,10 +83,19 @@ public class Tile
         this.adjacentBombs = bombs;
     }
 
-
     public int getAdjacentBombs()
     {
         return this.adjacentBombs;
+    }
+    
+    public void setIsBomb(boolean bool)
+    {
+        this.isBomb = bool;
+    }
+
+    public boolean getIsBomb()
+    {
+        return this.isBomb;
     }
 
 
