@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 0.2.5
+## Version 0.3.4
 ### Added
 - Remembered that they are mines, not bombs. 
 - Program can now calculate how many adjacent mines each tile has
