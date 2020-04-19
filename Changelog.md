@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 0.2.5
+### Added
+- Remembered that they are mines, not bombs. 
+- Program can now calculate how many adjacent mines each tile has
+- Included a lose() method that is called when a tile with a mine is selected
+- Included a win() that determines if the winning conditions have been met and ends the program
+
 ## Version 0.2.4
 ### Added
 - It is now possible to mark tiles that you think are bombs

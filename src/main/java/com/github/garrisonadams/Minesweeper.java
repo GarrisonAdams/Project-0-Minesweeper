@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class Minesweeper
 {
     boolean isPlaying = true;
+    boolean hasWon = false;
 
     static Tile[][] grid = new Tile[8][8];
     //Things to do
@@ -24,24 +25,69 @@ public class Minesweeper
                 grid[i][j] = new Tile(i,j);
             }
         }
+        
+        grid[0][4].setMine(true);
+        grid[0][1].setMine(true);
+        grid[2][7].setMine(true);
+        grid[0][3].setMine(true);
+        grid[4][4].setMine(true);
+        grid[2][5].setMine(true);
+        grid[3][6].setMine(true);
+        grid[0][7].setMine(true);
+        grid[1][0].setMine(true);
+        grid[0][3].setMine(true);
 
-        grid[4][4].setAdjacentBombs(0);  
-        grid[4][5].setAdjacentBombs(0);  
-        grid[4][6].setAdjacentBombs(0);   
-        grid[3][6].setAdjacentBombs(0);     
-        grid[5][3].setAdjacentBombs(0);    
-        grid[3][5].setAdjacentBombs(0);  
-        grid[3][4].setAdjacentBombs(0);    
-        grid[6][2].setAdjacentBombs(0); 
+        
+        
+        //Initializes the tiles of the Minesweeper grid
+        for(int i = 0; i <grid.length; i++)
+        {
+             for(int j = 0; j < grid[i].length; j++)
+            {
+                calculateAdjacentMines(i,j);
+            }
+        }
+    
+    
 
     }
 
+    public static void calculateAdjacentMines(int row, int column)
+    {
+    	int numOfMines = 0;
+    	
+        for(int i=row-1;i<row+2;i++)
+        {
+            for(int j = column-1; j<column+2; j++)
+            {
+                if(i == row && j == column)
+                {
+                    continue;
+                }
+                
+                if((i >= 0 && i <8) && (j >= 0 && j < 8))
+                {
+                	if(grid[i][j].isMine())
+                	{
+                		numOfMines++;
+                	}
+                }
+            }
+        }
+        
+        grid[row][column].setAdjacentMines(numOfMines);
+    }
+    
     public static void main(String[] args)
     {
         Minesweeper game = new Minesweeper();
         game.play();
     }
  
+    public void restart()
+    {
+    	
+    }
     public void play()
     {
         
@@ -52,7 +98,7 @@ public class Minesweeper
         //This while loop is the UI
         while(isPlaying)
         {
-            this.display();
+            this.display();;
             System.out.println();
             System.out.println();
 
@@ -65,6 +111,8 @@ public class Minesweeper
             String[] command = userInput.split(" ");
             
             executeCommand(command);
+            
+            win();
 
         }
         myScanner.close();
@@ -120,29 +168,83 @@ public class Minesweeper
         }
 
     }
+    
 
+    public void win()
+    {
+        for(int i = 0; i <grid.length; i++)
+        {
+             for(int j = 0; j < grid[i].length; j++)
+            {
+            	 if(grid[i][j].isCovered() && !grid[i][j].isMine())
+            	 {
+            		 return;
+            	 }
+            }
+        }
+        
+        for(int i = 0; i <grid.length; i++)
+        {
+             for(int j = 0; j < grid[i].length; j++)
+            {
+            	 if(grid[i][j].isMine())
+            	 {
+            		 grid[i][j].setTileDisplayValue("B");
+            	 }
+            }
+        }
+        	display();
+        	System.out.println("Congratulations! You won!");
+        	isPlaying = false;
+
+    }
+    
     public void uncoverTile(int row, int column)
     {
-        grid[row][column].setTileDisplayValue(String.valueOf(grid[row][column].getAdjacentBombs()));
-        grid[row][column].setIsCovered(false);
+        grid[row][column].setTileDisplayValue(String.valueOf(grid[row][column].getAdjacentMines()));
+        grid[row][column].setCovered(false);
     }
 
+    
+
+    
+    
+    
+    
+    public void lose ()
+    {
+    	display();
+    	System.out.println("You hit a bomb!");
+    	System.out.println("Game Over!");
+
+    	isPlaying = false;
+    	
+    }
+
+    
     public void selectTile(int row, int column)
     {
-        if(!grid[row][column].getIsMarked())
+    	if(grid[row][column].isMine())
+    	{
+            grid[row][column].setTileDisplayValue("B");
+            lose();
+    	}
+    	
+        if(!grid[row][column].isMarked())
         {
-            if(grid[row][column].getIsCovered() == true)
+            if(grid[row][column].isCovered() == true)
             {
                 this.uncoverTile(row,column);
 
-                if(grid[row][column].getAdjacentBombs()==0)
+                if(grid[row][column].getAdjacentMines()==0)
                 {
                     this.uncoverAdjacentTiles(row,column);
                 }
             }
         }
     }
-
+    
+    
     public void uncoverAdjacentTiles(int row, int column)
     {
         for(int i=row-1;i<row+2;i++)
@@ -153,30 +255,39 @@ public class Minesweeper
                 {
                     continue;
                 }
+                
+                if((i >= 0 && i <8) && (j >= 0 && j < 8))
+                {
                     this.selectTile(i,j);
+                }
             }
         }
     }
 
+    
+    
     public void markTile(int row, int column)
     {
-        if(grid[row][column].getIsCovered())
+        if(grid[row][column].isCovered())
         {
-            grid[row][column].setIsMarked(true);
+            grid[row][column].setMarked(true);
             grid[row][column].setTileDisplayValue("M");
         }
     }
 
+    
+    
     public void unmarkTile(int row, int column)
     {
-        if(grid[row][column].getIsMarked())
+        if(grid[row][column].isMarked())
         {
-            grid[row][column].setIsMarked(false);
+            grid[row][column].setMarked(false);
             grid[row][column].setTileDisplayValue(" ");
         }
 
     }
 
+    
     public void display()
     {
          //Sets up the numbers at the top of the display

@@ -15,11 +15,12 @@ public class Tile
 
     private boolean isCovered;
 
-    //Whether or not the tile has a bomb
-    private boolean isBomb;
+
+	//Whether or not the tile has a bomb
+    private boolean isMine;
 
     //The number of bombs that are adjacent to this tile
-    private int adjacentBombs;
+    private int adjacentMines;
 
     //What the tile displays on the command line
     private String tileDisplayValue;
@@ -32,14 +33,18 @@ public class Tile
         this.column = column;
         this.tileDisplayValue = " ";
         this.isCovered = true;
-        this.adjacentBombs = 1;
+        this.adjacentMines = 0;
         this.isMarked = false;
+        this.isMine = false;
+
     }
 
     @Override
     public String toString()
     {
-        return "Row: " + this.row + " Column: " + this.column + " isMarked " + this.getIsMarked() +  " isCovered " + this.getIsCovered();
+        return "Row: " + this.row + " Column: " + this.column 
+        		+ " isMarked " + this.isMarked() +  " isCovered " + this.isCovered() 
+        		+ " isMine " + this.isMine();
     }
 
 
@@ -55,38 +60,46 @@ public class Tile
 
 
 
-    public void setIsCovered(boolean bool)
+    public void setCovered(boolean bool)
     {
         this.isCovered = bool;
     }
 
 
-    public boolean getIsCovered()
+    public boolean isCovered()
     {
         return this.isCovered;
     }
 
+    
 
-    public void setIsMarked(boolean bool)
+    public void setMarked(boolean bool)
     {
         this.isMarked = bool;
     }
 
-
-    public boolean getIsMarked()
+    public boolean isMarked()
     {
         return this.isMarked;
     }
 
-
-    public void setAdjacentBombs(int bombs)
+    
+    public void setAdjacentMines(int num)
     {
-        this.adjacentBombs = bombs;
+       this.adjacentMines = num;
     }
 
-    public int getAdjacentBombs()
+    public int getAdjacentMines()
     {
-        return this.adjacentBombs;
+        return this.adjacentMines;
     }
 
+    
+    public boolean isMine() {
+ 		return this.isMine;
+ 	}
+
+ 	public void setMine(boolean isMine) {
+ 		this.isMine = isMine;
+ 	}
 }
