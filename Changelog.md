@@ -1,5 +1,20 @@
 # Changelog
 
+## Version 0.2.5
+### Added
+- Remembered that they are mines, not bombs. 
+- Program can now calculate how many adjacent mines each tile has
+- Included a lose() method that is called when a tile with a mine is selected
+- Included a win() that determines if the winning conditions have been met and ends the program
+
+## Version 0.2.4
+### Added
+- It is now possible to mark tiles that you think are bombs
+- Changed the access modifiers of the instance variables of Tile.java from default to private and created setters and getters for them
+- Tiles can be marked and unmarked
+- Minesweeper.java modified so the main() method only starts up the game and is not responsible for anything else
+- SRP hopefully followed
+
 ## Version 0.1.4
 ### Added
 - Selected tiles now propogate throughout the grid as expected, for a few test cases
