@@ -26,6 +26,7 @@ public class Minesweeper
             }
         }
         
+        //sets up mines
         grid[0][4].setMine(true);
         grid[0][1].setMine(true);
         grid[2][7].setMine(true);
@@ -37,8 +38,7 @@ public class Minesweeper
         grid[1][0].setMine(true);
         grid[0][3].setMine(true);
 
-        
-        
+          
         //Initializes the tiles of the Minesweeper grid
         for(int i = 0; i <grid.length; i++)
         {
@@ -47,11 +47,9 @@ public class Minesweeper
                 calculateAdjacentMines(i,j);
             }
         }
-    
-    
 
     }
-
+    
     public static void calculateAdjacentMines(int row, int column)
     {
     	int numOfMines = 0;
@@ -84,10 +82,6 @@ public class Minesweeper
         game.play();
     }
  
-    public void restart()
-    {
-    	
-    }
     public void play()
     {
         
@@ -166,9 +160,7 @@ public class Minesweeper
                 System.out.println("Invalid Command");
                 break;
         }
-
     }
-    
 
     public void win()
     {
@@ -204,13 +196,7 @@ public class Minesweeper
         grid[row][column].setTileDisplayValue(String.valueOf(grid[row][column].getAdjacentMines()));
         grid[row][column].setCovered(false);
     }
-
-    
-
-    
-    
-    
-    
+ 
     public void lose ()
     {
     	display();
@@ -221,7 +207,6 @@ public class Minesweeper
     	
     }
 
-    
     public void selectTile(int row, int column)
     {
     	if(grid[row][column].isMine())
@@ -243,8 +228,7 @@ public class Minesweeper
             }
         }
     }
-    
-    
+     
     public void uncoverAdjacentTiles(int row, int column)
     {
         for(int i=row-1;i<row+2;i++)
@@ -264,8 +248,6 @@ public class Minesweeper
         }
     }
 
-    
-    
     public void markTile(int row, int column)
     {
         if(grid[row][column].isCovered())
@@ -274,8 +256,6 @@ public class Minesweeper
             grid[row][column].setTileDisplayValue("M");
         }
     }
-
-    
     
     public void unmarkTile(int row, int column)
     {
@@ -287,7 +267,6 @@ public class Minesweeper
 
     }
 
-    
     public void display()
     {
          //Sets up the numbers at the top of the display
