@@ -23,11 +23,7 @@ public class BombDownload
 						
 			ResultSet rs = stmt.executeQuery();
 
-			while (rs.next())
-			{
-				Minesweeper.grid[rs.getInt("row")][rs.getInt("column")].setIsBomb(rs.getBoolean("isBomb"));
-				System.out.println(Minesweeper.grid[rs.getInt("row")][rs.getInt("column")]);
-			}
+			
 		} catch (SQLException e) 
 		{
 			e.printStackTrace();
