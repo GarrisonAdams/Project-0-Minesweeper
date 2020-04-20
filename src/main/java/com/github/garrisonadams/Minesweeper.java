@@ -28,16 +28,7 @@ public class Minesweeper {
 			}
 		}
 
-		grid[0][4].setMine(true);
-		grid[0][1].setMine(true);
-		grid[2][7].setMine(true);
-		grid[0][3].setMine(true);
-		grid[4][4].setMine(true);
-		grid[2][5].setMine(true);
-		grid[3][6].setMine(true);
-		grid[0][7].setMine(true);
-		grid[1][0].setMine(true);
-		grid[0][3].setMine(true);
+		mineInit();
 
 		// Initializes the tiles of the Minesweeper grid
 		for (int i = 0; i < grid.length; i++) {
@@ -45,7 +36,6 @@ public class Minesweeper {
 				calculateAdjacentMines(i, j);
 			}
 		}
-
 	}
 
 	public static void calculateAdjacentMines(int row, int column) {
@@ -73,39 +63,48 @@ public class Minesweeper {
 		game.play();
 	}
 
-	public void restart() {
+	public void mineInit() {
+		int numOfMines = 0;
+
+		while (numOfMines < 10) {
+			int row = (int) (Math.random() * 8);
+			int column = (int) (Math.random() * 8);
+
+			if (!grid[row][column].isMine()) {
+				grid[row][column].setMine(true);
+				numOfMines++;
+			}
+		}
 
 	}
 
 	public void play() {
 
 		String userInput = "";
-		
+
 		try {
 			FileReader in = new FileReader(
 					"C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\java\\com\\github\\garrisonadams\\Input.txt");
 			BufferedReader br = new BufferedReader(in);
 
+		//	Scanner myScanner = new Scanner(System.in);
 			// This while loop is the UI
 			while (isPlaying) {
 				this.display();
 				System.out.println();
 				System.out.println();
 
-				/* UI
-				 * System.out.println("Please enter exit in order to exit the game");
-				 * System.out.
-				 * println("To select a tile: enter select [row number] [column number]");
-				 * System.out.println("To mark a tile: enter mark [row number] [column number]"
-				 * ); System.out.
-				 * println("To unmark a tile: enter unmark [row number] [column number]");
-				 */
+				
+				  System.out.println("Please enter exit in order to exit the game");
+				  System.out.println("To select a tile: enter select [row number] [column number]");
+				  System.out.println("To mark a tile: enter mark [row number] [column number]"); 
+				  System.out.println("To unmark a tile: enter unmark [row number] [column number]");
+				 
+				
 
-				// userInput = myScanner.nextLine();
-
+			//	userInput = myScanner.nextLine();
 				userInput = InputOutput.read(br);
 				System.out.println(userInput);
-				
 
 				String[] command = userInput.split(" ");
 
@@ -113,12 +112,10 @@ public class Minesweeper {
 
 				win();
 			}
-			
-				br.close();
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			br.close();
+		//    myScanner.close();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -197,6 +194,15 @@ public class Minesweeper {
 	}
 
 	public void lose() {
+
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				if (grid[i][j].isMine()) {
+					grid[i][j].setTileDisplayValue("B");
+				}
+			}
+		}
+
 		display();
 		System.out.println("You hit a bomb!");
 		System.out.println("Game Over!");
@@ -255,7 +261,7 @@ public class Minesweeper {
 		// Sets up the numbers at the top of the display
 		for (int i = 0; i < 8; i++) {
 			if (i == 7) {
-				System.out.println("  " + i + " ");
+				System.out.println("   " + i + "   column number");
 				System.out.println("----------------------------------");
 			} else {
 				System.out.print("  " + i + " ");
@@ -267,7 +273,7 @@ public class Minesweeper {
 			for (int j = 0; j < 8; j++) {
 				if (j == 7) {
 					System.out.print("| " + grid[i][j].getTileDisplayValue() + " |");
-					System.out.println("   " + i);
+					System.out.println("   " + i + "   row number");
 					System.out.println("----------------------------------");
 				} else {
 					System.out.print("| " + grid[i][j].getTileDisplayValue() + " ");
