@@ -81,31 +81,44 @@ public class Minesweeper {
 
 		String userInput = "";
 
-		Scanner myScanner = new Scanner(System.in);
-		// This while loop is the UI
-		while (isPlaying) {
-			this.display();
-			System.out.println();
-			System.out.println();
+		try {
+			FileReader in = new FileReader(
+					"C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\java\\com\\github\\garrisonadams\\Input.txt");
+			BufferedReader br = new BufferedReader(in);
 
-			System.out.println("Please enter exit in order to exit the game");
-			System.out.println("To select a tile: enter select [row number] [column number]");
-			System.out.println("To mark a tile: enter mark [row number] [column number]");
-			System.out.println("To unmark a tile: enter unmark [row number] [column number]");
+		//	Scanner myScanner = new Scanner(System.in);
+			// This while loop is the UI
+			while (isPlaying) {
+				this.display();
+				System.out.println();
+				System.out.println();
 
-			 userInput = myScanner.nextLine();
-//		userInput = InputOutput.read(br);
-			System.out.println(userInput);
+				
+				  System.out.println("Please enter exit in order to exit the game");
+				  System.out.println("To select a tile: enter select [row number] [column number]");
+				  System.out.println("To mark a tile: enter mark [row number] [column number]"); 
+				  System.out.println("To unmark a tile: enter unmark [row number] [column number]");
+				 
+				
 
-			String[] command = userInput.split(" ");
+			//	userInput = myScanner.nextLine();
+				userInput = InputOutput.read(br);
+				System.out.println(userInput);
 
-			executeCommand(command);
+				String[] command = userInput.split(" ");
 
-			win();
+				executeCommand(command);
+
+				win();
+			}
+
+			br.close();
+		//    myScanner.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		//br.close();
-		 myScanner.close();
 	}
 
 	public void executeCommand(String[] command) {
