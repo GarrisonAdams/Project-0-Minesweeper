@@ -1,103 +1,84 @@
 package com.github.garrisonadams;
 
-public class Tile
-{
-    //To Do List:
-    //Access modifiers?
+public class Tile {
+	// To Do List:
 
-    //The location of the tile in the Minesweeper display
-    int row;
-    int column;
+	// The location of the tile in the Minesweeper display
+	int row;
+	int column;
 
-    //The states of a tile
-    // covered: ' '
-    // uncovered w/ bomb: 'X'
-    // uncovered w/o bomb: 'num'
+	// The states of a tile
+	// covered: ' '
+	// uncovered w/ bomb: 'X'
+	// uncovered w/o bomb: 'num'
 
+	private boolean isCovered;
 
-    boolean isCovered;
+	// Whether or not the tile has a bomb
+	private boolean isMine;
 
-    //Whether or not the tile has a bomb
-    boolean isBomb;
+	// The number of bombs that are adjacent to this tile
+	private int adjacentMines;
 
-    //The number of bombs that are adjacent to this tile
-    int adjacentBombs;
+	// What the tile displays on the command line
+	private String tileDisplayValue;
 
-    //What the tile displays on the command line
-    String tileDisplayValue;
+	private boolean isMarked;
 
-    public Tile(int row, int column)
-    {
-        this.row = row;
-        this.column = column;
-        this.tileDisplayValue = " ";
-        this.isCovered = true;
-        this.adjacentBombs = 1;
-    }
+	public Tile(int row, int column) {
+		this.row = row;
+		this.column = column;
+		this.tileDisplayValue = " ";
+		this.isCovered = true;
+		this.adjacentMines = 0;
+		this.isMarked = false;
+		this.isMine = false;
 
-    public void setTileDisplayValue(String value)
-    {
-        this.tileDisplayValue = value;
-    }
+	}
 
-    public String getTileDisplayValue()
-    {
-        return this.tileDisplayValue;
-    }
+	@Override
+	public String toString() {
+		return "Row: " + this.row + " Column: " + this.column + " isMarked " + this.isMarked() + " isCovered "
+				+ this.isCovered() + " isMine " + this.isMine();
+	}
 
-    //How to display grid one last time if bomb?
-    //Option 1: have the Minesweeper object be a parameter and execute it here
-    //Option 2: have this method be executed in the Minesweeper.java class
+	public void setTileDisplayValue(String value) {
+		this.tileDisplayValue = value;
+	}
 
-    @Override
-    public String toString()
-    {
-        return String.valueOf(this.row) + " " + String.valueOf(this.column);
-    }
+	public String getTileDisplayValue() {
+		return this.tileDisplayValue;
+	}
 
-    public void uncoverTile()
-    {
-        System.out.println("Inside uncoverTile() method");
-        System.out.println("Tile " + this.row + " " + this.column +" isCovered: " + this.isCovered);
-        this.setTileDisplayValue(String.valueOf(adjacentBombs));
-        this.setIsCovered(false);
-        System.out.println("Tile " + this.row + " " + this.column + " is " + this.getIsCovered() + " and has " + this.getAdjacentBombs() + " adjacent bombs");
-        System.out.println("Exiting uncoverTile() method");
-        System.out.println();
+	public void setCovered(boolean bool) {
+		this.isCovered = bool;
+	}
 
-    }
+	public boolean isCovered() {
+		return this.isCovered;
+	}
 
+	public void setMarked(boolean bool) {
+		this.isMarked = bool;
+	}
 
-    public void setIsCovered(boolean bool)
-    {
-        this.isCovered = bool;
-    }
+	public boolean isMarked() {
+		return this.isMarked;
+	}
 
-    public boolean getIsCovered()
-    {
-        return this.isCovered;
-    }
+	public void setAdjacentMines(int num) {
+		this.adjacentMines = num;
+	}
 
-    public void setAdjacentBombs(int bombs)
-    {
-        this.adjacentBombs = bombs;
-    }
+	public int getAdjacentMines() {
+		return this.adjacentMines;
+	}
 
-    public int getAdjacentBombs()
-    {
-        return this.adjacentBombs;
-    }
-    
-    public void setIsBomb(boolean bool)
-    {
-        this.isBomb = bool;
-    }
+	public boolean isMine() {
+		return this.isMine;
+	}
 
-    public boolean getIsBomb()
-    {
-        return this.isBomb;
-    }
-
-
-
+	public void setMine(boolean isMine) {
+		this.isMine = isMine;
+	}
 }
