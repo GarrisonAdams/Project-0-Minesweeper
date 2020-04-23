@@ -4,8 +4,8 @@ public class Tile {
 	// To Do List:
 
 	// The location of the tile in the Minesweeper display
-	int row;
-	int column;
+	private int row;
+	private int column;
 
 	// The states of a tile
 	// covered: ' '
@@ -23,62 +23,62 @@ public class Tile {
 	// What the tile displays on the command line
 	private String tileDisplayValue;
 
-	private boolean isMarked;
+	private boolean isFlag;
 
-	public Tile(int row, int column) {
+	protected Tile(int row, int column) {
 		this.row = row;
 		this.column = column;
 		this.tileDisplayValue = " ";
 		this.isCovered = true;
 		this.adjacentMines = 0;
-		this.isMarked = false;
+		this.isFlag = false;
 		this.isMine = false;
 
 	}
 
 	@Override
 	public String toString() {
-		return "Row: " + this.row + " Column: " + this.column + " isMarked " + this.isMarked() + " isCovered "
+		return "Row: " + this.row + " Column: " + this.column + " isFlagged " + this.isFlag() + " isCovered "
 				+ this.isCovered() + " isMine " + this.isMine();
 	}
 
-	public void setTileDisplayValue(String value) {
+	protected void setTileDisplayValue(String value) {
 		this.tileDisplayValue = value;
 	}
 
-	public String getTileDisplayValue() {
+	protected String getTileDisplayValue() {
 		return this.tileDisplayValue;
 	}
 
-	public void setCovered(boolean bool) {
+	protected void setCovered(boolean bool) {
 		this.isCovered = bool;
 	}
 
-	public boolean isCovered() {
+	protected boolean isCovered() {
 		return this.isCovered;
 	}
 
-	public void setMarked(boolean bool) {
-		this.isMarked = bool;
+	protected void setFlag(boolean bool) {
+		this.isFlag = bool;
 	}
 
-	public boolean isMarked() {
-		return this.isMarked;
+	protected boolean isFlag() {
+		return this.isFlag;
 	}
 
-	public void setAdjacentMines(int num) {
+	protected void setAdjacentMines(int num) {
 		this.adjacentMines = num;
 	}
 
-	public int getAdjacentMines() {
+	protected int getAdjacentMines() {
 		return this.adjacentMines;
 	}
 
-	public boolean isMine() {
+	protected boolean isMine() {
 		return this.isMine;
 	}
 
-	public void setMine(boolean isMine) {
+	protected void setMine(boolean isMine) {
 		this.isMine = isMine;
 	}
 }

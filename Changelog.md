@@ -1,4 +1,16 @@
 # Changelog
+## Version 0.4.0
+### Added
+- Changed the access modifiers of most of the methods of Minesweeper.java and Tile.java to private or protected
+- changed all references of mark to flag (ex: boolean variable isMark became isFlag)
+- Minesweeper.java now has a restart() method that starts up another game if the user enters "Y"
+
+
+## Version 0.3.0
+### Added
+- Modified the play() method so it can accept input from a file
+- Included the ground work that will need to connecting and interacting with a database
+- Refactoring
 
 ## Version 0.2.5
 ### Added
