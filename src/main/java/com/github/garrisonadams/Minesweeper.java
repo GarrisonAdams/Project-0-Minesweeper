@@ -205,6 +205,10 @@ public class Minesweeper {
 
 	}
 
+	private void uncoverTile(int row, int column) {
+		grid[row][column].setTileDisplayValue(String.valueOf(grid[row][column].getAdjacentMines()));
+		grid[row][column].setCovered(false);
+	}
 
 	private void lose() {
 
@@ -225,8 +229,6 @@ public class Minesweeper {
 		isPlaying = false;
 	}
 
-	
-	
 
 	private void selectTile(int row, int column) {
 		if (grid[row][column].isMine()) {
@@ -241,11 +243,6 @@ public class Minesweeper {
 				}
 			}
 		}
-	}
-
-	private void uncoverTile(int row, int column) {
-		grid[row][column].setTileDisplayValue(String.valueOf(grid[row][column].getAdjacentMines()));
-		grid[row][column].setCovered(false);
 	}
 
 	private void uncoverAdjacentTiles(int row, int column) {
@@ -263,7 +260,6 @@ public class Minesweeper {
 		}
 	}
 
-	
 	private void flagTile(int row, int column) {
 		if (grid[row][column].isCovered()) {
 			grid[row][column].setFlag(true);
