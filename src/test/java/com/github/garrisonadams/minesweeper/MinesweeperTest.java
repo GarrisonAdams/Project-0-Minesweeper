@@ -95,4 +95,21 @@ public class MinesweeperTest {
 			}
 	    	
 	    }
+	    
+	    @Test
+	    public void whenCountingMines()
+	    {
+	    	Minesweeper game = new Minesweeper();
+	    	int numOfMines = 0;
+	    	
+	    	for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					if(game.grid[i][j].isMine())
+						numOfMines++;
+				}
+			}
+	    	
+	    	assertEquals(10,numOfMines);
+	    	
+	    }
 }

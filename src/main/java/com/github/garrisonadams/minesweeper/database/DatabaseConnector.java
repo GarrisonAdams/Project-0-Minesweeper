@@ -9,7 +9,7 @@ public class DatabaseConnector
 	
 	private static final String CONNECTION_USERNAME = "user";
 	private static final String CONNECTION_PASSWORD = "password";
-	private static final String URL = "jdbc:postgresql://18.217.53.107:5432/user";
+	private static final String URL = "jdbc:postgresql://18.216.144.66:5432/user";
 	private static Connection connection;
 	
 	
@@ -25,7 +25,6 @@ public class DatabaseConnector
 			connection = DriverManager.getConnection(URL, CONNECTION_USERNAME, CONNECTION_PASSWORD);
 
 		}
-		
 		//If connection was closed then retrieve a new connection
 		if (connection.isClosed()){
 				connection = DriverManager.getConnection(URL, CONNECTION_USERNAME, CONNECTION_PASSWORD);

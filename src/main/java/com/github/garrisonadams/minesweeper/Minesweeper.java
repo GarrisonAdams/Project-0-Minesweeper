@@ -1,8 +1,12 @@
 package com.github.garrisonadams.minesweeper;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 import com.github.garrisonadams.minesweeper.database.Database;
+import com.github.garrisonadams.minesweeper.io.InputOutput;
 
 public class Minesweeper {
 
@@ -10,10 +14,10 @@ public class Minesweeper {
 	protected boolean hasLost = false;
 	Database database = Database.getInstance();
 
-
 	protected Tile[][] grid = new Tile[8][8];
 
 	public Minesweeper() {
+
 		// Initializes the tiles of the Minesweeper grid
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
@@ -23,7 +27,6 @@ public class Minesweeper {
 
 		mineInit();
 
-		// Initializes the tiles of the Minesweeper grid
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				calculateAdjacentMines(i, j);
@@ -46,6 +49,7 @@ public class Minesweeper {
 	}
 
 	protected void calculateAdjacentMines(int row, int column) {
+
 		int numOfMines = 0;
 
 		for (int i = row - 1; i < row + 2; i++) {
@@ -66,90 +70,89 @@ public class Minesweeper {
 	}
 
 	public static void main(String[] args) {
+
 		Minesweeper game = new Minesweeper();
-		game.play();
+
+		game.startup();
 	}
 
+	protected void startup() {
 
-	protected void play() {
 		String userInput = "";
 		String username = "";
-		boolean authenticated = false;
+		String password = "";
+		boolean isAuthenticated = false;
+		try {
+			FileReader in = new FileReader(
+					"C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\java\\com\\github\\garrisonadams\\Input.txt");
+			BufferedReader br = new BufferedReader(in);
 
-		Scanner myScanner = new Scanner(System.in);
-		// This while loop is the UI
-		System.out.println("This is Minesweeper! \n Please enter your username");
-		
-		username = myScanner.nextLine();
-		
-		
-		while(!authenticated)
-		{
-			authenticated = database.authenticateUser(username, myScanner);
-		}
-		
-		
-		System.out.println("User: " + username);
-		
-		while (isPlaying) 
-		{
-			display();
-			System.out.println();
-			System.out.println();
+			// This while loop is the UI
+			System.out.println("This is Minesweeper! \n Please enter your username");
 
-			System.out.println("Please enter exit in order to exit the game");
-			System.out.println("To select a tile: enter select [row number] [column number]");
-			System.out.println("To flag a tile: enter flag [row number] [column number]");
-			System.out.println("To unflag a tile: enter unflag [row number] [column number]");
+			username = InputOutput.read(br);
+			password = InputOutput.read(br);
 
-			 userInput = myScanner.nextLine();
-//				userInput = InputOutput.read(br);
-			System.out.println(userInput);
+			isAuthenticated = database.authenticateUser(username, password);
 
-			String[] command = userInput.split(" ");
+			while (isPlaying && isAuthenticated) {
+				display();
+				System.out.println();
+				System.out.println();
 
-			executeCommand(command);
+				System.out.println("Please enter exit in order to exit the game");
+				System.out.println("To select a tile: enter select [row number] [column number]");
+				System.out.println("To flag a tile: enter flag [row number] [column number]");
+				System.out.println("To unflag a tile: enter unflag [row number] [column number]");
 
-			if(hasWon())
-			{
-				win();
-				database.incrementWin(username);
+				userInput = InputOutput.read(br);
+				System.out.println(userInput);
+
+				String[] command = userInput.split(" ");
+
+				executeCommand(command);
+
+				if (hasWon()) {
+					win();
+					database.incrementWin(username);
+				}
+
+				if (hasLost) {
+					lose();
+					database.incrementLoss(username);
+				}
+
 			}
-			
-			if(hasLost)
-			{
-				lose();
-				database.incrementLoss(username);
-			}
-			
-		}
-		database.printUsernameStats(username);
-		System.out.println("Would you like to restart the game? (Y/N):");
-		
-		userInput = myScanner.nextLine();
 
-		if(userInput.equals("Y"))
-		{
-			isPlaying = true;
-			restart();
+			database.printUsernameStats(username);
+
+			System.out.println("Would you like to restart the game? (Y/N):");
+
+			// userInput = myScanner.nextLine();
+			userInput = InputOutput.read(br);
+
+			if (userInput.equals("Y")) {
+				isPlaying = true;
+				restart();
+			} else {
+				System.out.println("Thank you for playing!");
+				// myScanner.close();
+				br.close();
+				System.exit(0);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		else
-		{
-			System.out.println("Thank you for playing!");
-			myScanner.close();
-//			br.close();
-			System.exit(0);
-		}
-		
+
 	}
 
-	protected void restart()
-	{
+	protected void restart() {
 		Minesweeper game = new Minesweeper();
-		game.play();
+		game.startup();
 	}
 
 	protected void executeCommand(String[] command) {
+
 		String subcommand = "";
 		int row = 0;
 		int column = 0;
@@ -175,7 +178,6 @@ public class Minesweeper {
 		case "exit":
 			System.out.println("Thank you for playing");
 			System.exit(0);
-			isPlaying = false;
 			break;
 		case "select":
 			this.selectTile(row, column);
@@ -201,12 +203,11 @@ public class Minesweeper {
 				}
 			}
 		}
-		
+
 		return true;
 	}
 
-	protected void win()
-	{
+	protected void win() {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				if (grid[i][j].isMine()) {
@@ -226,7 +227,6 @@ public class Minesweeper {
 	}
 
 	protected void lose() {
-
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				if (grid[i][j].isMine()) {
@@ -240,15 +240,13 @@ public class Minesweeper {
 		display();
 		System.out.println("You hit a bomb!");
 		System.out.println("Game Over!");
-
 		isPlaying = false;
 	}
 
 	protected void selectTile(int row, int column) {
 		if (grid[row][column].isMine()) {
 			hasLost = true;
-		}
-		else if (!grid[row][column].isFlag()) {
+		} else if (!grid[row][column].isFlag()) {
 			if (grid[row][column].isCovered() == true) {
 				this.uncoverTile(row, column);
 
@@ -260,7 +258,7 @@ public class Minesweeper {
 	}
 
 	protected void uncoverAdjacentTiles(int row, int column) {
-		
+
 		for (int i = row - 1; i < row + 2; i++) {
 			for (int j = column - 1; j < column + 2; j++) {
 				if (i == row && j == column) {

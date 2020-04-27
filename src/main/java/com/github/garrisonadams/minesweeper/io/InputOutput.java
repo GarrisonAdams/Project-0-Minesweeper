@@ -6,7 +6,7 @@ import java.io.IOException;
 public class InputOutput 
 {
 	
-	protected static String read(BufferedReader br)
+	public static String read(BufferedReader br)
 	{
 		String output = "";
 		try {

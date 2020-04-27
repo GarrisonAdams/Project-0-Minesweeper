@@ -6,17 +6,17 @@ public class Tile {
 	// The location of the tile in the Minesweeper display
 	private int row;
 	private int column;
-
 	// The states of a tile
 	// covered: ' '
 	// uncovered w/ bomb: 'X'
 	// uncovered w/o bomb: 'num'
 
+//	hasMine?
+//	hasFlag?
+//	hasMine?
 	private boolean isCovered;
-
 	// Whether or not the tile has a bomb
 	private boolean isMine;
-
 	// The number of bombs that are adjacent to this tile
 	private int adjacentMines;
 
