@@ -1,4 +1,4 @@
-package com.github.garrisonadams;
+package com.github.garrisonadams.minesweeper.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

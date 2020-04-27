@@ -1,4 +1,4 @@
-package com.github.garrisonadams;
+package com.github.garrisonadams.minesweeper.io;
 
 import java.io.BufferedReader;
 import java.io.IOException;

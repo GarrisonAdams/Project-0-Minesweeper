@@ -1,4 +1,11 @@
 # Changelog
+
+## Version 0.5.0
+### Added
+- Database methods now work
+- Included some test methods
+- Included a src/main/resources folder that contains a Dockerfile and a schema.sql file
+
 ## Version 0.4.0
 ### Added
 - Changed the access modifiers of most of the methods of Minesweeper.java and Tile.java to private or protected

@@ -1,4 +1,4 @@
-package com.github.garrisonadams;
+package com.github.garrisonadams.minesweeper;
 
 public class Tile {
 	// To Do List:

@@ -1,18 +1,13 @@
-package com.github.garrisonadams;
+package com.github.garrisonadams.minesweeper;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.Scanner;
 
 public class Minesweeper {
 
-	private boolean isPlaying = true;
-	private boolean hasLost = false;
+	protected boolean isPlaying = true;
+	protected boolean hasLost = false;
 
-	private Tile[][] grid = new Tile[8][8];
+	protected Tile[][] grid = new Tile[8][8];
 
 	public Minesweeper() {
 		// Initializes the tiles of the Minesweeper grid
@@ -32,7 +27,21 @@ public class Minesweeper {
 		}
 	}
 
-	private void calculateAdjacentMines(int row, int column) {
+	protected void mineInit() {
+		int numOfMines = 0;
+
+		while (numOfMines < 10) {
+			int row = (int) (Math.random() * 8);
+			int column = (int) (Math.random() * 8);
+
+			if (!grid[row][column].isMine()) {
+				grid[row][column].setMine(true);
+				numOfMines++;
+			}
+		}
+	}
+
+	protected void calculateAdjacentMines(int row, int column) {
 		int numOfMines = 0;
 
 		for (int i = row - 1; i < row + 2; i++) {
@@ -57,21 +66,8 @@ public class Minesweeper {
 		game.play();
 	}
 
-	private void mineInit() {
-		int numOfMines = 0;
 
-		while (numOfMines < 10) {
-			int row = (int) (Math.random() * 8);
-			int column = (int) (Math.random() * 8);
-
-			if (!grid[row][column].isMine()) {
-				grid[row][column].setMine(true);
-				numOfMines++;
-			}
-		}
-	}
-
-	private void play() {
+	protected void play() {
 		String userInput = "";
 
 		Scanner myScanner = new Scanner(System.in);
@@ -126,16 +122,14 @@ public class Minesweeper {
 		}
 		
 	}
-	
-	
-	private void restart()
+
+	protected void restart()
 	{
 		Minesweeper game = new Minesweeper();
 		game.play();
 	}
 
-	
-	private void executeCommand(String[] command) {
+	protected void executeCommand(String[] command) {
 		String subcommand = "";
 		int row = 0;
 		int column = 0;
@@ -160,6 +154,7 @@ public class Minesweeper {
 		switch (subcommand) {
 		case "exit":
 			System.out.println("Thank you for playing");
+			System.exit(0);
 			isPlaying = false;
 			break;
 		case "select":
@@ -178,7 +173,7 @@ public class Minesweeper {
 
 	}
 
-	private boolean hasWon() {
+	protected boolean hasWon() {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				if (grid[i][j].isCovered() && !grid[i][j].isMine()) {
@@ -190,7 +185,7 @@ public class Minesweeper {
 		return true;
 	}
 
-	private void win()
+	protected void win()
 	{
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
@@ -205,12 +200,12 @@ public class Minesweeper {
 
 	}
 
-	private void uncoverTile(int row, int column) {
+	protected void uncoverTile(int row, int column) {
 		grid[row][column].setTileDisplayValue(String.valueOf(grid[row][column].getAdjacentMines()));
 		grid[row][column].setCovered(false);
 	}
 
-	private void lose() {
+	protected void lose() {
 
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
@@ -229,8 +224,7 @@ public class Minesweeper {
 		isPlaying = false;
 	}
 
-
-	private void selectTile(int row, int column) {
+	protected void selectTile(int row, int column) {
 		if (grid[row][column].isMine()) {
 			hasLost = true;
 		}
@@ -245,7 +239,7 @@ public class Minesweeper {
 		}
 	}
 
-	private void uncoverAdjacentTiles(int row, int column) {
+	protected void uncoverAdjacentTiles(int row, int column) {
 		
 		for (int i = row - 1; i < row + 2; i++) {
 			for (int j = column - 1; j < column + 2; j++) {
@@ -260,21 +254,21 @@ public class Minesweeper {
 		}
 	}
 
-	private void flagTile(int row, int column) {
+	protected void flagTile(int row, int column) {
 		if (grid[row][column].isCovered()) {
 			grid[row][column].setFlag(true);
 			grid[row][column].setTileDisplayValue("F");
 		}
 	}
 
-	private void unflagTile(int row, int column) {
+	protected void unflagTile(int row, int column) {
 		if (grid[row][column].isFlag()) {
 			grid[row][column].setFlag(false);
 			grid[row][column].setTileDisplayValue(" ");
 		}
 	}
 
-	private void display() {
+	protected void display() {
 		// Sets up the numbers at the top of the display
 		for (int i = 0; i < 8; i++) {
 			if (i == 7) {

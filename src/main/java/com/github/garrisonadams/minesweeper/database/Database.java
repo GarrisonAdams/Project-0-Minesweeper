@@ -1,4 +1,4 @@
-package com.github.garrisonadams;
+package com.github.garrisonadams.minesweeper.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +14,7 @@ public class Database {
 		}
 		return instance;
 	}
+	
 	Connection connection = null; // Our connection to the database
 	PreparedStatement stmt = null; // We use prepared statements to help protect against SQL injection
 
@@ -113,6 +114,7 @@ public class Database {
 			stmt = connection.prepareStatement(sql2);
 			stmt.setInt(1, losses + 1);
 			stmt.setString(2, username);
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -122,13 +124,31 @@ public class Database {
 		}
 
 	}
+	
+	public void reset(String username) {
+		try {
+			
+			connection = DatabaseConnector.getConnection();
+			String sql = "UPDATE MinesweeperGame SET wins=0, losses=0 where username=username"; // Our SQL query
+			stmt = connection.prepareStatement(sql); // Creates the prepared statement from the query
+			stmt.executeUpdate(); // Queries the database
+
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+		
+	}
 
 	public static void main(String[] args) {
 		Database db = new Database();
 		db.printDatabase();
-		db.newUser("Tracey");
-		//db.incrementWin("Garrison");
+		db.incrementWin("Garrison");
 		db.printDatabase();
+		db.reset("Garrison");
 
 	}
 
