@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class Database {
 	private static Database instance;
@@ -18,13 +19,76 @@ public class Database {
 	Connection connection = null; // Our connection to the database
 	PreparedStatement stmt = null; // We use prepared statements to help protect against SQL injection
 
-	public void newUser(String username)
+	public boolean authenticateUser(String username, Scanner myScanner)
+	{
+		String password;
+		try {
+			connection = DatabaseConnector.getConnection();
+			String sql = "SELECT * FROM MinesweeperGame where username=?"; // Our SQL query
+			stmt = connection.prepareStatement(sql); // Creates the prepared statement from the query
+			stmt.setString(1, username);
+			ResultSet rs = stmt.executeQuery(); // Queries the database
+			
+			if(rs.next())
+			{
+				System.out.println("Username is " + username);
+				System.out.println("Please enter your password: ");
+				System.out.println("Or enter \\q to exit the application");
+				password = myScanner.nextLine();
+				System.out.println(password);
+				if(password.equals("\\q")) {
+					System.out.println("Now exitting application");
+					System.exit(0);
+				}
+				
+				String sql2 = "SELECT * FROM UserAuthentication where username=? AND password=?"; // Our SQL query
+				stmt = connection.prepareStatement(sql2); // Creates the prepared statement from the query
+				stmt.setString(1, username);
+				stmt.setString(2, password);
+				ResultSet rs2 = stmt.executeQuery(); // Queries the database
+				if(rs2.next())
+				{
+					System.out.println("User authenticated");
+					return true;
+				}
+				else {
+					System.out.println("User not authenticated");
+					return false;
+				}
+				
+				
+			}
+			else
+			{
+				System.out.println("Username is not found. \n Please enter a password: ");
+				password = myScanner.nextLine();
+				newUser(username,password);
+				return true;
+			}
+			
+			
+			} catch (SQLException e)
+			{
+				e.printStackTrace();
+			} finally {
+				closeResources();
+			}
+		return false;
+	}
+	
+	public void newUser(String username, String password)
 	{
 		try {
 		connection = DatabaseConnector.getConnection();
 		String sql = "INSERT INTO MinesweeperGame VALUES (?,0,0)"; // Our SQL query
 		stmt = connection.prepareStatement(sql); // Creates the prepared statement from the query
 		stmt.setString(1, username);
+		stmt.executeUpdate(); // Queries the database
+		
+		String sql2 = "INSERT INTO userAuthentication VALUES (?,?)"; // Our SQL query
+		stmt = connection.prepareStatement(sql2); // Creates the prepared statement from the query
+		stmt.setString(1, username);
+		stmt.setString(2, password);
 		stmt.executeUpdate(); // Queries the database
 		} catch (SQLException e)
 		{
@@ -34,7 +98,7 @@ public class Database {
 		}
 	}
 	
-	public void printDatabase() {
+	public void printMinesweeperGame() {
 		try {
 			connection = DatabaseConnector.getConnection();
 			String sql = "SELECT * FROM MinesweeperGame"; // Our SQL query
@@ -55,6 +119,26 @@ public class Database {
 
 	}
 	
+	public void printUserAuthentication() {
+		try {
+			connection = DatabaseConnector.getConnection();
+			String sql = "SELECT * FROM UserAuthentication"; // Our SQL query
+			stmt = connection.prepareStatement(sql); // Creates the prepared statement from the query
+			ResultSet rs = stmt.executeQuery(); // Queries the database
+
+			while (rs.next()) {
+				System.out.println("Username: " + rs.getString("username") + "  password: " + rs.getInt("password"));
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+
+	}
+	
 	public void printUsernameStats(String username) {
 		try {
 			connection = DatabaseConnector.getConnection();
@@ -62,8 +146,9 @@ public class Database {
 			stmt = connection.prepareStatement(sql); // Creates the prepared statement from the query
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery(); // Queries the database
-
-			System.out.println("Username: " + username + " Wins: " + rs.getInt("wins") + " Losses: " + rs.getInt("losses"));
+			
+			if(rs.next())
+				System.out.println("Username: " + username + " Wins: " + rs.getInt("wins") + " Losses: " + rs.getInt("losses"));
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -144,11 +229,12 @@ public class Database {
 	}
 
 	public static void main(String[] args) {
-		Database db = new Database();
-		db.printDatabase();
-		db.incrementWin("Garrison");
-		db.printDatabase();
-		db.reset("Garrison");
+		Database db = Database.getInstance();
+		db.printMinesweeperGame();
+		db.reset("garrison");
+		db.printUserAuthentication();
+		db.printUsernameStats("garrison");
+
 
 	}
 

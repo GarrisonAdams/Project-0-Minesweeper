@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 0.6.0
+### Added
+- Minesweeper.java now implements all of the database methods
 ## Version 0.5.0
 ### Added
 - Database methods now work

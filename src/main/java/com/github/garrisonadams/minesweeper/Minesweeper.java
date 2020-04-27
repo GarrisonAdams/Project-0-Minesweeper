@@ -2,10 +2,14 @@ package com.github.garrisonadams.minesweeper;
 
 import java.util.Scanner;
 
+import com.github.garrisonadams.minesweeper.database.Database;
+
 public class Minesweeper {
 
 	protected boolean isPlaying = true;
 	protected boolean hasLost = false;
+	Database database = Database.getInstance();
+
 
 	protected Tile[][] grid = new Tile[8][8];
 
@@ -69,9 +73,23 @@ public class Minesweeper {
 
 	protected void play() {
 		String userInput = "";
+		String username = "";
+		boolean authenticated = false;
 
 		Scanner myScanner = new Scanner(System.in);
 		// This while loop is the UI
+		System.out.println("This is Minesweeper! \n Please enter your username");
+		
+		username = myScanner.nextLine();
+		
+		
+		while(!authenticated)
+		{
+			authenticated = database.authenticateUser(username, myScanner);
+		}
+		
+		
+		System.out.println("User: " + username);
 		
 		while (isPlaying) 
 		{
@@ -95,15 +113,17 @@ public class Minesweeper {
 			if(hasWon())
 			{
 				win();
+				database.incrementWin(username);
 			}
 			
 			if(hasLost)
 			{
 				lose();
+				database.incrementLoss(username);
 			}
-
+			
 		}
-		
+		database.printUsernameStats(username);
 		System.out.println("Would you like to restart the game? (Y/N):");
 		
 		userInput = myScanner.nextLine();
@@ -278,7 +298,6 @@ public class Minesweeper {
 				System.out.print("  " + i + " ");
 			}
 		}
-
 		// Sets up the rows of the grid
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
