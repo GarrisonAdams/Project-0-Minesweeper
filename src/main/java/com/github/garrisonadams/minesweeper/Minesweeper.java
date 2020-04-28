@@ -45,7 +45,18 @@ public class Minesweeper {
 			}
 		}
 
-		mineInit();
+		//mineInit();
+		grid[3][0].setMine(true);
+		grid[3][1].setMine(true);
+		grid[3][2].setMine(true);
+		grid[0][4].setMine(true);
+		grid[1][4].setMine(true);
+		grid[2][4].setMine(true);
+		grid[5][4].setMine(true);
+		grid[6][4].setMine(true);
+		grid[7][4].setMine(true);
+		grid[5][1].setMine(true);
+
 
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
@@ -90,34 +101,31 @@ public class Minesweeper {
 	}
 
 	public static void main(String[] args) {
-
-		try {
-			InputHandler in = new InputHandler("input.txt");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String inputfile = "";
+		if(args[0] != null)
+		{
+			inputfile = args[0];
 		}
 		Minesweeper game = new Minesweeper();
-
-		game.startup();
+		game.startup(inputfile);
 	}
 
-	protected void startup() {
+	protected void startup(String inputFile) {
 
 		String userInput = "";
 		String username = "";
 		String password = "";
 		boolean isAuthenticated = false;
-	//	try {
-			// FileReader in = new FileReader(
-			// 		"C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\java\\com\\github\\garrisonadams\\Input.txt");
-			// BufferedReader br = new BufferedReader(in);
+		try {
+			 FileReader in = new FileReader(
+			 		"C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\resources\\" + inputFile);
+			 BufferedReader br = new BufferedReader(in);
 
 			// This while loop is the UI
 			System.out.println("This is Minesweeper! \n Please enter your username");
 
-			username = InputHandler.read();
-			password = InputHandler.read();
+			username = InputHandler.read(br);
+			password = InputHandler.read(br);
 
 			isAuthenticated = database.authenticateUser(username, password);
 
@@ -131,7 +139,7 @@ public class Minesweeper {
 				System.out.println("To flag a tile: enter flag [row number] [column number]");
 				System.out.println("To unflag a tile: enter unflag [row number] [column number]");
 
-				userInput = InputHandler.read();
+				userInput = InputHandler.read(br);
 				System.out.println(userInput);
 
 				String[] command = userInput.split(" ");
@@ -155,25 +163,25 @@ public class Minesweeper {
 			System.out.println("Would you like to restart the game? (Y/N):");
 
 			// userInput = myScanner.nextLine();
-			userInput = InputHandler.read();
+			userInput = InputHandler.read(br);
 
 			if (userInput.equals("Y")) {
 				isPlaying = true;
-				restart();
+				//restart();
 			} else {
 				System.out.println("Thank you for playing!");
 				System.exit(0);
 			}
-	//	} catch (IOException e) {
-	//		e.printStackTrace();
-	//	}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
-	protected void restart() {
-		Minesweeper game = new Minesweeper();
-		game.startup();
-	}
+//	protected void restart() {
+//		Minesweeper game = new Minesweeper();
+//		game.startup();
+//	}
 
 	protected void executeCommand(String[] command) {
 

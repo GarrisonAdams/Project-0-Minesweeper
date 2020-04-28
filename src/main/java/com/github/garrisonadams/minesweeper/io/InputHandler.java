@@ -6,26 +6,14 @@
 package com.github.garrisonadams.minesweeper.io;
 
 import java.io.BufferedReader;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class InputHandler {
-
-	static BufferedReader br;
-	public InputHandler(String inputFile) throws FileNotFoundException
-	{
-		try(
-		FileReader in = new FileReader(
-			"C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\resources\\" + inputFile);
-	    BufferedReader br = new BufferedReader(in)){}catch(IOException e)
-	{
-		e.printStackTrace();
-	};
-
-	}
 	
-	public static String read()
+	public static String read(BufferedReader br)
 	{
 		String output = "";
 		try {
