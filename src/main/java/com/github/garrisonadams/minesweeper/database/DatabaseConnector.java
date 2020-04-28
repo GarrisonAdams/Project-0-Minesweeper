@@ -1,3 +1,7 @@
+/**
+ *  The DatabaseConnector class uses JDBC to create the Connection object
+ *  getConnection() returns a connection to a database
+ */
 package com.github.garrisonadams.minesweeper.database;
 
 import java.sql.Connection;

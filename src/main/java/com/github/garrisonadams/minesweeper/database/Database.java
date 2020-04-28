@@ -1,10 +1,20 @@
+/**
+ * The Database Class contains the methods that Minesweeper.java uses to access and manipulate the database
+ * 
+ * authenticateUser(String username, String password) : returns true if the username and password exist in the UserDatabase table.
+ * 		If the username is valid but the password is not, then it returns false
+ * 		If the username is not valid, then it will ask for a password, create a new account, and return true
+ * newUser(String username, String password): a void method that creates a new row in the UserDatabase table
+ * incrementWin(String username): retrieves the number of wins on a username's account, increments it, and updates the database
+ * incrementLosses(String username): retrieves the number of losses on a username's account, increments it, and updates the database
+ * printUsernameStats(String username) : prints out the username's wins and losses
+ */
 package com.github.garrisonadams.minesweeper.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class Database {
 	private static Database instance;
@@ -20,12 +30,7 @@ public class Database {
 	PreparedStatement stmt = null; // We use prepared statements to help protect against SQL injection
 
 	public boolean authenticateUser(String username, String password)
-
 	{
-		boolean authenticated = false;
-
-		while(!authenticated)
-		{
 		try {
 			connection = DatabaseConnector.getConnection();
 			String sql = "SELECT * FROM MinesweeperGame where username=?"; // Our SQL query
@@ -37,14 +42,7 @@ public class Database {
 			{
 				System.out.println("Username is " + username);
 				System.out.println("Please enter your password: ");
-				System.out.println("Or enter \\q to exit the application");
-				
-				System.out.println(password);
-				if(password.equals("\\q")) {
-					System.out.println("Now exitting application");
-					System.exit(0);
-				}
-				
+												
 				String sql2 = "SELECT * FROM UserDatabase where username=? AND password=?"; // Our SQL query
 				stmt = connection.prepareStatement(sql2); // Creates the prepared statement from the query
 				stmt.setString(1, username);
@@ -59,12 +57,10 @@ public class Database {
 					System.out.println("User not authenticated");
 					return false;
 				}
-				
-				
 			}
 			else
 			{
-				System.out.println("Username is not found. \n Please enter a password: ");
+				System.out.println("Username is not found. \n Account will be created. Please enter a password: ");
 				newUser(username,password);
 				return true;
 			}
@@ -75,39 +71,41 @@ public class Database {
 			} finally {
 				closeResources();
 			}
-		}
+		
 		return false;
 	}
 	
-	public void newUser(String username, String password)
-
+	public boolean newUser(String username, String password)
 	{
 		try {
 		connection = DatabaseConnector.getConnection();
-		String sql = "INSERT INTO MinesweeperGame VALUES (?,0,0)"; // Our SQL query
-		stmt = connection.prepareStatement(sql); // Creates the prepared statement from the query
+		String sql = "INSERT INTO MinesweeperGame VALUES (?,0,0)"; 
+		stmt = connection.prepareStatement(sql); 
 		stmt.setString(1, username);
-		stmt.executeUpdate(); // Queries the database
+		stmt.executeUpdate(); 
 		
-		String sql2 = "INSERT INTO UserDatabase VALUES (?,?)"; // Our SQL query
-		stmt = connection.prepareStatement(sql2); // Creates the prepared statement from the query
+		String sql2 = "INSERT INTO UserDatabase VALUES (?,?)"; 
+		stmt = connection.prepareStatement(sql2); 
 		stmt.setString(1, username);
 		stmt.setString(2, password);
-		stmt.executeUpdate(); // Queries the database
+		stmt.executeUpdate();
+		return true;
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
 		} finally {
 			closeResources();
 		}
+		return false;
 	}
 
 	public void incrementWin(String username) {
 		try {
 			int wins=0;
 			connection = DatabaseConnector.getConnection();
-			String sql = "SELECT * FROM MinesweeperGame where username=username"; // Our SQL query
+			String sql = "SELECT * FROM MinesweeperGame where username=?"; // Our SQL query
 			stmt = connection.prepareStatement(sql); // Creates the prepared statement from the query
+			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery(); // Queries the database
 			if(rs.next())
 				 wins = rs.getInt("wins");
@@ -131,8 +129,9 @@ public class Database {
 		try {
 			int losses = 0;
 			connection = DatabaseConnector.getConnection();
-			String sql = "SELECT losses FROM MinesweeperGame where username=username"; // Our SQL query
+			String sql = "SELECT losses FROM MinesweeperGame where username=?"; // Our SQL query
 			stmt = connection.prepareStatement(sql); // Creates the prepared statement from the query
+			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery(); // Queries the database
 
 			if(rs.next())

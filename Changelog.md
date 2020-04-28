@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.7.0
+### Added
+- Added documentation at the top of most files
+- Changed InputOutput.java to InputHandler.java
 ## Version 0.6.0
 ### Added
 - Minesweeper.java now implements all of the database methods

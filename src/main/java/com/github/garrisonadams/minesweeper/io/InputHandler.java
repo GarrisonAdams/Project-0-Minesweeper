@@ -1,9 +1,14 @@
+/**
+ * InputHandler is a class that handles the input from a .CSV file
+ * The read(BufferedReader br) method has a BufferedReader object as input and outputs the next line of the BufferedReader object.
+ */
+
 package com.github.garrisonadams.minesweeper.io;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class InputOutput 
+public class InputHandler
 {
 	
 	public static String read(BufferedReader br)

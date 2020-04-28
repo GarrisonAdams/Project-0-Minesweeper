@@ -1,2 +1,5 @@
-com\github\garrisonadams\Tile.class
-com\github\garrisonadams\Minesweeper.class
+com\github\garrisonadams\minesweeper\database\DatabaseConnector.class
+com\github\garrisonadams\minesweeper\database\Database.class
+com\github\garrisonadams\minesweeper\io\InputHandler.class
+com\github\garrisonadams\minesweeper\Minesweeper.class
+com\github\garrisonadams\minesweeper\Tile.class
