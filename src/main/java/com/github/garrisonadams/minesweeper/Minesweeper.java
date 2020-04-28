@@ -1,6 +1,27 @@
+/**
+ * The Minesweeper contains the methods needed to run the Minesweeper game
+ * 
+ * Minesweeper(): The constructor initializes all the Tile grid, plants 10 mines throughout the Tile grid, 
+ * 		and updates the Tile grid to contain the number of adjacent bombs each tile has.
+ * mineInit(): selects a random Tile in the grid. If it is a mine, it does nothing. If it is not a mine, then the Tile becomes one.
+ * 		There are 10 mines total. Called in Minesweeper().
+ * calculateAdjacentMines(int row, int column): calculates the number of mines adjacent to a Tile, and assigns that value to the Tile's adjacentMines variable
+ * 		Does this for every Tile. Called in Minesweeper().
+ * display(): This method prints out the Minesweeper grid.
+ * hasWon(): This method is called after every command is executed to determine if the user has won. 
+ * 		A Minesweeper game is won when every Tile that is not a mine is uncovered. This method returns a boolean value
+ * win(): This method is called after it has been confirmed that the user has won a game
+ * 		This method uncovers all of the tiles, calls the display() method, and prints a congratulatory message
+ * lose(): This method is called when hasLost, which has a default value of false, is assigned a value of true.
+ * 		This only happens when the user selects a Tile with a mine.
+ * 		This method uncovers all of the tiles, calls the display() method, and tells the user they lost
+
+ */
+
 package com.github.garrisonadams.minesweeper;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -67,8 +88,15 @@ public class Minesweeper {
 
 		grid[row][column].setAdjacentMines(numOfMines);
 	}
+
 	public static void main(String[] args) {
 
+		try {
+			InputHandler in = new InputHandler("input.txt");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Minesweeper game = new Minesweeper();
 
 		game.startup();
@@ -80,16 +108,16 @@ public class Minesweeper {
 		String username = "";
 		String password = "";
 		boolean isAuthenticated = false;
-		try {
-			FileReader in = new FileReader(
-					"C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\java\\com\\github\\garrisonadams\\Input.txt");
-			BufferedReader br = new BufferedReader(in);
+	//	try {
+			// FileReader in = new FileReader(
+			// 		"C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\java\\com\\github\\garrisonadams\\Input.txt");
+			// BufferedReader br = new BufferedReader(in);
 
 			// This while loop is the UI
 			System.out.println("This is Minesweeper! \n Please enter your username");
 
-			username = InputHandler.read(br);
-			password = InputHandler.read(br);
+			username = InputHandler.read();
+			password = InputHandler.read();
 
 			isAuthenticated = database.authenticateUser(username, password);
 
@@ -103,7 +131,7 @@ public class Minesweeper {
 				System.out.println("To flag a tile: enter flag [row number] [column number]");
 				System.out.println("To unflag a tile: enter unflag [row number] [column number]");
 
-				userInput = InputHandler.read(br);
+				userInput = InputHandler.read();
 				System.out.println(userInput);
 
 				String[] command = userInput.split(" ");
@@ -127,20 +155,18 @@ public class Minesweeper {
 			System.out.println("Would you like to restart the game? (Y/N):");
 
 			// userInput = myScanner.nextLine();
-			userInput = InputHandler.read(br);
+			userInput = InputHandler.read();
 
 			if (userInput.equals("Y")) {
 				isPlaying = true;
 				restart();
 			} else {
 				System.out.println("Thank you for playing!");
-				// myScanner.close();
-				br.close();
 				System.exit(0);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	//	} catch (IOException e) {
+	//		e.printStackTrace();
+	//	}
 
 	}
 
