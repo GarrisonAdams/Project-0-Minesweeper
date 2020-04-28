@@ -1,0 +1,12 @@
+garrison
+adams
+select 2 0
+flag 7 7
+select 7 6
+select 7 7
+unflag 7 7
+select 7 7
+Y
+select 0 0
+Y
+exit

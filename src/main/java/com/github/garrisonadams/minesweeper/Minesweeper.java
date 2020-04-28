@@ -45,18 +45,17 @@ public class Minesweeper {
 			}
 		}
 
-		//mineInit();
-		grid[3][0].setMine(true);
-		grid[3][1].setMine(true);
-		grid[3][2].setMine(true);
+		// mineInit();
+		grid[0][0].setMine(true);
+		grid[0][1].setMine(true);
+		grid[0][2].setMine(true);
+		grid[0][3].setMine(true);
 		grid[0][4].setMine(true);
-		grid[1][4].setMine(true);
-		grid[2][4].setMine(true);
-		grid[5][4].setMine(true);
-		grid[6][4].setMine(true);
-		grid[7][4].setMine(true);
-		grid[5][1].setMine(true);
-
+		grid[0][5].setMine(true);
+		grid[0][6].setMine(true);
+		grid[0][7].setMine(true);
+		grid[1][0].setMine(true);
+		grid[1][1].setMine(true);
 
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
@@ -102,8 +101,7 @@ public class Minesweeper {
 
 	public static void main(String[] args) {
 		String inputfile = "";
-		if(args[0] != null)
-		{
+		if (args[0] != null) {
 			inputfile = args[0];
 		}
 		Minesweeper game = new Minesweeper();
@@ -111,25 +109,45 @@ public class Minesweeper {
 	}
 
 	protected void startup(String inputFile) {
-
-		String userInput = "";
 		String username = "";
 		String password = "";
-		boolean isAuthenticated = false;
+		boolean isAuthenticated =false;
+		
 		try {
-			 FileReader in = new FileReader(
-			 		"C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\resources\\" + inputFile);
-			 BufferedReader br = new BufferedReader(in);
+			FileReader in = new FileReader("C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\resources\\" + inputFile);
+
+			BufferedReader br = new BufferedReader(in);
 
 			// This while loop is the UI
-			System.out.println("This is Minesweeper! \n Please enter your username");
+			System.out.println("This is Minesweeper! \n Please enter your username \n If username is not currently valid, a new account will be made.");
 
 			username = InputHandler.read(br);
+			System.out.println("Username: " + username);
+
+			System.out.println("Please enter your password");
 			password = InputHandler.read(br);
 
-			isAuthenticated = database.authenticateUser(username, password);
+		 	isAuthenticated = database.authenticateUser(username, password);
 
-			while (isPlaying && isAuthenticated) {
+			 if(isAuthenticated)
+			 {
+				userInterface(br, inputFile, username, password);
+			 }
+			 else{
+				System.exit(1);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+	}
+
+	public void userInterface(BufferedReader br, String inputFile,String username, String password) {
+		String userInput = "";
+
+			while (isPlaying) 
+			{
 				display();
 				System.out.println();
 				System.out.println();
@@ -162,26 +180,25 @@ public class Minesweeper {
 
 			System.out.println("Would you like to restart the game? (Y/N):");
 
-			// userInput = myScanner.nextLine();
 			userInput = InputHandler.read(br);
+			System.out.println(userInput);
 
 			if (userInput.equals("Y")) {
 				isPlaying = true;
-				//restart();
+				restart(br,inputFile, username, password);
 			} else {
 				System.out.println("Thank you for playing!");
 				System.exit(0);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 	}
+	
+	
 
-//	protected void restart() {
-//		Minesweeper game = new Minesweeper();
-//		game.startup();
-//	}
+	protected void restart(BufferedReader br,String inputFile, String username, String password) {
+
+			Minesweeper game = new Minesweeper();
+			game.userInterface(br,inputFile,username,password);
+	}
 
 	protected void executeCommand(String[] command) {
 
@@ -265,7 +282,7 @@ public class Minesweeper {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				if (grid[i][j].isMine()) {
-					grid[i][j].setTileDisplayValue("B");
+					grid[i][j].setTileDisplayValue("M");
 				} else {
 					grid[i][j].setTileDisplayValue(String.valueOf(grid[i][j].getAdjacentMines()));
 				}
