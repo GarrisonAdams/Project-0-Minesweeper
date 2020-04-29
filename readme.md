@@ -12,15 +12,12 @@
 - com.github.garrisonadams.minesweeper
     - Minesweeper.java: main program that starts up the program
     - Tile.java: The class that describes the Tiles used in Minesweeper.java
-
--com.github.garrisonadams.database
+- com.github.garrisonadams.database
     - Database.java: class that contains the methods that interact with the postgres database
     - DatabaseConnector.java: class that connects to the postgres database
-
--com.github.garrisonadams.io
+- com.github.garrisonadams.io
     - InputHandler.java: class that 
-
--src\main\resources
+- src\main\resources
     - contains UserNotAuthenticate.csv and UserWin.csv, which contain the input to the program
 
 ## Explanation
