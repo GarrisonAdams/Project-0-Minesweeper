@@ -60,7 +60,7 @@ public class Database {
 			}
 			else
 			{
-				System.out.println("Username is not found. \n Account will be created. Please enter a password: ");
+				System.out.println("Username is not found. \n Account will be created. ");
 				newUser(username,password);
 				return true;
 			}

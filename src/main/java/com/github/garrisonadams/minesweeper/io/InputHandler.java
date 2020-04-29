@@ -8,6 +8,7 @@ package com.github.garrisonadams.minesweeper.io;
 import java.io.BufferedReader;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class InputHandler {
 	
@@ -29,6 +30,14 @@ public class InputHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return output;
+	}
+
+	public static String read(Scanner sc)
+	{
+		String output = "";
+		output = sc.nextLine();
+		
 		return output;
 	}
 

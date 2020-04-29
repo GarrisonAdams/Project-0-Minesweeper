@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 import com.github.garrisonadams.minesweeper.database.Database;
 import com.github.garrisonadams.minesweeper.io.InputHandler;
@@ -45,17 +46,7 @@ public class Minesweeper {
 			}
 		}
 
-		// mineInit();
-		grid[0][0].setMine(true);
-		grid[0][1].setMine(true);
-		grid[0][2].setMine(true);
-		grid[0][3].setMine(true);
-		grid[0][4].setMine(true);
-		grid[0][5].setMine(true);
-		grid[0][6].setMine(true);
-		grid[0][7].setMine(true);
-		grid[1][0].setMine(true);
-		grid[1][1].setMine(true);
+		mineInit();
 
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
@@ -100,38 +91,64 @@ public class Minesweeper {
 	}
 
 	public static void main(String[] args) {
-		String inputfile = "";
-		if (args[0] != null) {
-			inputfile = args[0];
+		boolean inputType = true;
+		String inputFile = "";
+		if(args[0].equals("Scanner"))
+			inputType = true;
+		else if(args[0].equals("BufferedReader"))
+		{
+			inputType = false;
+			inputFile = args[1];
 		}
+		
 		Minesweeper game = new Minesweeper();
-		game.startup(inputfile);
+		game.startup(inputFile, inputType);
 	}
 
-	protected void startup(String inputFile) {
+	protected void startup(String inputFile, boolean inputType) {
 		String username = "";
 		String password = "";
 		boolean isAuthenticated =false;
-		
+		Scanner myScanner;
+		BufferedReader br;
+
 		try {
-			FileReader in = new FileReader("C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\resources\\" + inputFile);
-
-			BufferedReader br = new BufferedReader(in);
-
+			if(inputType)
+			{
+				myScanner = new Scanner(System.in);
+				br = null;
+			}
+			else
+			{ 
+				FileReader in = new FileReader("C:\\Users\\Garrison\\Project-0-Garrison\\src\\main\\resources\\" + inputFile);
+				 br = new BufferedReader(in);
+				 myScanner = null;
+			}
 			// This while loop is the UI
-			System.out.println("This is Minesweeper! \n Please enter your username \n If username is not currently valid, a new account will be made.");
+			System.out.println("Welcome to Minesweeper! \n Please enter your username and password. \n If username is not currently valid, a new account will be made.");
 
-			username = InputHandler.read(br);
-			System.out.println("Username: " + username);
-
-			System.out.println("Please enter your password");
-			password = InputHandler.read(br);
+			if(inputType)
+			{
+				System.out.println("Please enter your username");
+				username = InputHandler.read(myScanner);
+				System.out.println("Username: " + username);
+				System.out.println("Please enter your password");
+				password = InputHandler.read(myScanner);
+			}
+			else
+			{
+				System.out.println("Please enter your username");
+				username = InputHandler.read(br);
+				System.out.println("Username: " + username);
+				System.out.println("Please enter your password");
+				password = InputHandler.read(br);
+			}
 
 		 	isAuthenticated = database.authenticateUser(username, password);
 
 			 if(isAuthenticated)
 			 {
-				userInterface(br, inputFile, username, password);
+				userInterface(br, inputFile, username, password, inputType);
 			 }
 			 else{
 				System.exit(1);
@@ -140,12 +157,11 @@ public class Minesweeper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
 	}
 
-	public void userInterface(BufferedReader br, String inputFile,String username, String password) {
+	public void userInterface(BufferedReader br, String inputFile,String username, String password,boolean inputType) {
 		String userInput = "";
-
+		Scanner mysc = new Scanner(System.in);
 			while (isPlaying) 
 			{
 				display();
@@ -157,7 +173,15 @@ public class Minesweeper {
 				System.out.println("To flag a tile: enter flag [row number] [column number]");
 				System.out.println("To unflag a tile: enter unflag [row number] [column number]");
 
-				userInput = InputHandler.read(br);
+				if(inputType)
+				{
+					userInput = InputHandler.read(mysc);
+				}
+				else
+				{
+					userInput = InputHandler.read(br);
+				}
+
 				System.out.println(userInput);
 
 				String[] command = userInput.split(" ");
@@ -180,12 +204,20 @@ public class Minesweeper {
 
 			System.out.println("Would you like to restart the game? (Y/N):");
 
-			userInput = InputHandler.read(br);
+			if(inputType)
+			{
+				userInput = InputHandler.read(mysc);
+			}
+			else
+			{
+				userInput = InputHandler.read(br);
+			}
+
 			System.out.println(userInput);
 
 			if (userInput.equals("Y")) {
 				isPlaying = true;
-				restart(br,inputFile, username, password);
+				restart(br,inputFile, username, password, inputType);
 			} else {
 				System.out.println("Thank you for playing!");
 				System.exit(0);
@@ -194,10 +226,10 @@ public class Minesweeper {
 	
 	
 
-	protected void restart(BufferedReader br,String inputFile, String username, String password) {
+	protected void restart(BufferedReader br,String inputFile, String username, String password, boolean inputType) {
 
 			Minesweeper game = new Minesweeper();
-			game.userInterface(br,inputFile,username,password);
+			game.userInterface(br,inputFile,username,password, inputType);
 	}
 
 	protected void executeCommand(String[] command) {
@@ -272,7 +304,7 @@ public class Minesweeper {
 	protected void lose() {
 		uncoverAllTiles();
 		display();
-		System.out.println("You hit a bomb!");
+		System.out.println("You selected a mine!");
 		System.out.println("Game Over!");
 		isPlaying = false;
 	}
