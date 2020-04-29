@@ -16,7 +16,7 @@
     - Database.java: class that contains the methods that interact with the postgres database
     - DatabaseConnector.java: class that connects to the postgres database
 - com.github.garrisonadams.io
-    - InputHandler.java: class that 
+    - InputHandler.java: class that reads the next line from the input file
 - src\main\resources
     - contains UserNotAuthenticate.csv and UserWin.csv, which contain the input to the program
 
