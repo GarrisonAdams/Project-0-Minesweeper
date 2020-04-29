@@ -5,8 +5,8 @@
     java -jar target/*.jar
 
 - To set up the database:
-    sudo docker run -d --name minesweeper -p 5432:5432 --rm -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password postgres
-    sudo docker exec -it minesweeper psql -U user
+    - sudo docker run -d --name minesweeper -p 5432:5432 --rm -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password postgres
+    - sudo docker exec -it minesweeper psql -U user
 
 ## Design
 - com.github.garrisonadams.minesweeper
@@ -27,7 +27,7 @@
         - username varchar
         - wins int
         - losses int
-        
+
 ## Explanation
 - main() creates a Minesweeper object, and passes String[] args to  its startup() method
     - First, startup() creates a BufferedReader object using the String[] args, which must contain an input file
