@@ -13,7 +13,7 @@ public class DatabaseConnector
 	
 	private static final String CONNECTION_USERNAME = "user";
 	private static final String CONNECTION_PASSWORD = "password";
-	private static final String URL = "jdbc:postgresql://3.135.9.214:5432/user";
+	private static final String URL = "jdbc:postgresql://18.221.1.229:5432/user";
 	private static Connection connection;
 	
 	
@@ -34,6 +34,16 @@ public class DatabaseConnector
 				connection = DriverManager.getConnection(URL, CONNECTION_USERNAME, CONNECTION_PASSWORD);
 		}
 		return connection;
+	}
+
+	public static void main(String[] args)
+	{
+		try {
+			Connection connect = DriverManager.getConnection(URL, CONNECTION_USERNAME, CONNECTION_PASSWORD);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 
